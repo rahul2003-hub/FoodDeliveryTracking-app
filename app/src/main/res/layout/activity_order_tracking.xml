@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:orientation="vertical">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <TextView android:id="@+id/statusPlaced" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/placed" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="›" />
+            <TextView android:id="@+id/statusAccepted" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/accepted" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="›" />
+            <TextView android:id="@+id/statusPickedUp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/picked_up" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="›" />
+            <TextView android:id="@+id/statusOutForDelivery" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/out_for_delivery" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="›" />
+            <TextView android:id="@+id/statusDelivered" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/delivered" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView android:id="@+id/textTrackingOrderId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="?attr/textAppearanceTitleLarge" />
+            <TextView android:id="@+id/textTrackingDriver" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="@color/text_secondary" />
+            <TextView android:id="@+id/textTrackingItems" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" />
+            <TextView android:id="@+id/textTrackingTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:textColor="@color/primary_orange" android:textStyle="bold" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>
