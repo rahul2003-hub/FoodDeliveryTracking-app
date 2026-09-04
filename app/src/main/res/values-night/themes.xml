@@ -5,6 +5,8 @@
         <item name="colorSecondary">@color/primary_orange_light</item>
         <item name="colorOnSecondary">@color/secondary_dark</item>
         <item name="colorTertiary">@color/accent_green</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
         <item name="android:fontFamily">sans</item>
     </style>
 </resources>

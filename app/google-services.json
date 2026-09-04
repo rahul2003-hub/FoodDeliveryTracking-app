@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "398479717289",
+    "firebase_url": "https://fooddeliverytracking-d407b-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "fooddeliverytracking-d407b",
     "storage_bucket": "fooddeliverytracking-d407b.firebasestorage.app"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.example.fooddeliverytracking"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "398479717289-ch02vhmif67cgjpoc69550l17fukbtjf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCwJZccx46OdHqNvoXLCulk6PMqdD9TrvY"
@@ -20,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398479717289-ch02vhmif67cgjpoc69550l17fukbtjf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -1,6 +1,8 @@
 package com.example.fooddeliverytracking.customer;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.TextView;
@@ -28,13 +30,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class CustomerHomeActivity extends AppCompatActivity {
 
     private static final double RESTAURANT_LAT = 12.9716;
     private static final double RESTAURANT_LNG = 77.5946;
-    private static final double CUSTOMER_LAT = 12.9750;
-    private static final double CUSTOMER_LNG = 77.5990;
 
     private final List<MenuItem> allMenuItems = Arrays.asList(
             new MenuItem("burger", "Classic Burger", "Grilled patty with fresh vegetables", 120, R.drawable.ic_burger),
@@ -109,6 +110,24 @@ public class CustomerHomeActivity extends AppCompatActivity {
             return;
         }
 
+        new Thread(() -> findAddressAndPlaceOrder(user, items, address)).start();
+    }
+
+    private void findAddressAndPlaceOrder(FirebaseUser user, List<OrderItem> items, String address) {
+        try {
+            List<Address> results = new Geocoder(this, Locale.getDefault()).getFromLocationName(address, 1);
+            if (results == null || results.isEmpty()) {
+                runOnUiThread(() -> Toast.makeText(this, R.string.address_not_found, Toast.LENGTH_SHORT).show());
+                return;
+            }
+            Address result = results.get(0);
+            runOnUiThread(() -> saveOrder(user, items, address, result.getLatitude(), result.getLongitude()));
+        } catch (Exception error) {
+            runOnUiThread(() -> Toast.makeText(this, R.string.address_not_found, Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private void saveOrder(FirebaseUser user, List<OrderItem> items, String address, double latitude, double longitude) {
         String orderId = FirebaseDatabase.getInstance().getReference(Constants.NODE_ORDERS).push().getKey();
         if (orderId == null) {
             Toast.makeText(this, getString(R.string.auth_failed, ""), Toast.LENGTH_SHORT).show();
@@ -119,8 +138,8 @@ public class CustomerHomeActivity extends AppCompatActivity {
         order.setRestaurantAddress("College Campus");
         order.setRestaurantLat(RESTAURANT_LAT);
         order.setRestaurantLng(RESTAURANT_LNG);
-        order.setCustomerLat(CUSTOMER_LAT);
-        order.setCustomerLng(CUSTOMER_LNG);
+        order.setCustomerLat(latitude);
+        order.setCustomerLng(longitude);
         order.setCreatedAt(System.currentTimeMillis());
 
         FirebaseDatabase.getInstance().getReference(Constants.NODE_ORDERS).child(orderId).setValue(order)

@@ -66,4 +66,5 @@
     <string name="mark_delivered">Mark Delivered</string>
     <string name="simulate_driver_step">Simulate Driver Step</string>
     <string name="location_permission_needed">Location permission is needed to share live delivery updates.</string>
+    <string name="address_not_found">Enter a complete, real delivery address.</string>
 </resources>
