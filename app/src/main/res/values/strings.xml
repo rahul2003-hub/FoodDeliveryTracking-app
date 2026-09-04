@@ -52,4 +52,18 @@
     <string name="out_for_delivery">On the way</string>
     <string name="delivered">Delivered</string>
     <string name="view_orders">View Orders</string>
+    <string name="available_orders">Available Orders</string>
+    <string name="my_deliveries">My Deliveries</string>
+    <string name="no_available_orders">No new orders available.</string>
+    <string name="no_active_deliveries">No active deliveries.</string>
+    <string name="accept_order">Accept Order</string>
+    <string name="open_delivery">Open Delivery</string>
+    <string name="order_accepted">Order accepted.</string>
+    <string name="customer_details">Customer: %1$s</string>
+    <string name="destination">Destination: %1$s</string>
+    <string name="mark_picked_up">Mark Picked Up</string>
+    <string name="start_delivery">Start Delivery</string>
+    <string name="mark_delivered">Mark Delivered</string>
+    <string name="simulate_driver_step">Simulate Driver Step</string>
+    <string name="location_permission_needed">Location permission is needed to share live delivery updates.</string>
 </resources>

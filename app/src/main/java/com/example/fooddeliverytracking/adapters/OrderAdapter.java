@@ -28,6 +28,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     private final List<Order> orders = new ArrayList<>();
     private final OnTrackOrderClick listener;
+    private int actionTextRes = R.string.track_order;
 
     public OrderAdapter(OnTrackOrderClick listener) {
         this.listener = listener;
@@ -36,6 +37,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public void setOrders(List<Order> updatedOrders) {
         orders.clear();
         orders.addAll(updatedOrders);
+        notifyDataSetChanged();
+    }
+
+    public void setActionTextRes(int actionTextRes) {
+        this.actionTextRes = actionTextRes;
         notifyDataSetChanged();
     }
 
@@ -57,6 +63,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.status.setText(holder.itemView.getContext().getString(R.string.status, status));
         holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), getStatusColor(order.getStatus())));
         holder.total.setText(holder.itemView.getContext().getString(R.string.order_total, order.getTotalAmount()));
+        holder.track.setText(actionTextRes);
         holder.track.setOnClickListener(view -> listener.onTrackOrder(order));
     }
 
