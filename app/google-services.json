@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "398479717289",
+    "project_id": "fooddeliverytracking-d407b",
+    "storage_bucket": "fooddeliverytracking-d407b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398479717289:android:6bc7bc36305c5544db4ab8",
+        "android_client_info": {
+          "package_name": "com.example.fooddeliverytracking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwJZccx46OdHqNvoXLCulk6PMqdD9TrvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
