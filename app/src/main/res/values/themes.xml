@@ -1,9 +1,38 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.FoodDeliveryTracking" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary_orange</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/primary_orange_light</item>
+        <item name="colorOnPrimaryContainer">@color/secondary_dark</item>
+        <item name="colorSecondary">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorTertiary">@color/accent_green</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:colorAccent">@color/primary_orange</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowBackground">@color/background_light</item>
+        <item name="android:statusBarColor">@color/primary_orange_dark</item>
+        <item name="android:navigationBarColor">@color/surface_light</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.FoodDelivery.Headline</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.FoodDelivery.Title</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.FoodDelivery.Body</item>
     </style>
 
     <style name="Theme.FoodDeliveryTracking" parent="Base.Theme.FoodDeliveryTracking" />
+
+    <style name="TextAppearance.FoodDelivery.Headline" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.FoodDelivery.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.FoodDelivery.Body" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">sans</item>
+    </style>
 </resources>

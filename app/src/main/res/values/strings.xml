@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">FoodDeliveryTracking</string>
+    <string name="app_name">Food Delivery Tracking</string>
+    <string name="login">Login</string>
+    <string name="register">Create Account</string>
+    <string name="customer_home">Food Menu</string>
+    <string name="my_orders">My Orders</string>
+    <string name="track_order">Track Order</string>
+    <string name="driver_dashboard">Driver Dashboard</string>
+    <string name="delivery_details">Delivery Details</string>
+    <string name="live_location_notification">Driver Live Location Tracking</string>
+    <string name="live_location_notification_text">Sharing your location with the customer.</string>
 </resources>
