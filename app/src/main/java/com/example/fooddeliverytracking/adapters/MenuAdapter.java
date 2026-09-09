@@ -73,6 +73,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         return total;
     }
 
+    public void clearCart() {
+        quantities.clear();
+        notifyDataSetChanged();
+        cartChangedListener.onCartChanged();
+    }
+
     @NonNull
     @Override
     public MenuViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

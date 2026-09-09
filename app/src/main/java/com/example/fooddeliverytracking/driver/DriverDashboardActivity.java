@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fooddeliverytracking.R;
 import com.example.fooddeliverytracking.adapters.OrderAdapter;
+import com.example.fooddeliverytracking.auth.LoginActivity;
 import com.example.fooddeliverytracking.models.Order;
 import com.example.fooddeliverytracking.models.User;
 import com.example.fooddeliverytracking.utils.Constants;
@@ -67,6 +68,11 @@ public class DriverDashboardActivity extends AppCompatActivity {
 
         availableButton.setOnClickListener(view -> showAvailableOrders());
         deliveriesButton.setOnClickListener(view -> showMyDeliveries());
+        ((MaterialButton) findViewById(R.id.buttonLogout)).setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, LoginActivity.class));
+            finishAffinity();
+        });
         showAvailableOrders();
     }
 

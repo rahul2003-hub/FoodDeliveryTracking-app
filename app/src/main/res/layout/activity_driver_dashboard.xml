@@ -5,12 +5,26 @@
     android:background="@color/background_light"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/driver_dashboard"
-        android:textAppearance="?attr/textAppearanceHeadlineLarge" />
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/driver_dashboard"
+            android:textAppearance="?attr/textAppearanceHeadlineLarge" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonLogout"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logout" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

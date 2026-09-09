@@ -25,7 +25,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_orders" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonLogout"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logout" />
     </LinearLayout>
+
+    <Spinner
+        android:id="@+id/spinnerRestaurant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:entries="@array/restaurant_names"
+        android:prompt="@string/select_restaurant" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -105,6 +120,14 @@
                 android:text="@string/place_order"
                 app:backgroundTint="@color/white"
                 android:textColor="@color/primary_orange" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonCancelOrder"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel_order"
+                android:textColor="@color/white" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
