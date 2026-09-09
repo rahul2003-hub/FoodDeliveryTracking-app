@@ -41,6 +41,8 @@ public class DriverDashboardActivity extends AppCompatActivity {
     private Query activeQuery;
     private ValueEventListener ordersListener;
     private boolean showingAvailable = true;
+    private boolean showingHistory;
+    private boolean online = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +53,13 @@ public class DriverDashboardActivity extends AppCompatActivity {
             finish();
             return;
         }
+        ((TextView) findViewById(R.id.textDriverGreeting)).setText(getString(R.string.hello_driver, driverName));
         driverName = driver.getEmail() == null ? driverName : driver.getEmail();
         FirebaseDatabase.getInstance().getReference(Constants.NODE_USERS).child(driver.getUid()).get()
                 .addOnSuccessListener(snapshot -> {
                     User profile = snapshot.getValue(User.class);
                     if (profile != null && profile.getName() != null) driverName = profile.getName();
+                    ((TextView) findViewById(R.id.textDriverGreeting)).setText(getString(R.string.hello_driver, driverName));
                 });
 
         emptyText = findViewById(R.id.textEmptyDriverOrders);
@@ -68,15 +72,37 @@ public class DriverDashboardActivity extends AppCompatActivity {
 
         availableButton.setOnClickListener(view -> showAvailableOrders());
         deliveriesButton.setOnClickListener(view -> showMyDeliveries());
-        ((MaterialButton) findViewById(R.id.buttonLogout)).setOnClickListener(view -> {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class));
-            finishAffinity();
+        findViewById(R.id.buttonHome).setOnClickListener(view -> showAvailableOrders());
+        findViewById(R.id.buttonMyOrders).setOnClickListener(view -> {
+            showingHistory = true;
+            showingAvailable = false;
+            orderAdapter.setActionTextRes(R.string.view_details);
+            listenToOrders(FirebaseDatabase.getInstance().getReference(Constants.NODE_ORDERS)
+                    .orderByChild("driverId").equalTo(driver.getUid()));
         });
+        com.google.android.material.materialswitch.MaterialSwitch onlineSwitch = findViewById(R.id.switchOnline);
+        online = getPreferences(MODE_PRIVATE).getBoolean("online", true);
+        onlineSwitch.setChecked(online);
+        onlineSwitch.setText(online ? R.string.online : R.string.offline);
+        onlineSwitch.setOnCheckedChangeListener((button, checked) -> {
+            online = checked;
+            getPreferences(MODE_PRIVATE).edit().putBoolean("online", checked).apply();
+            onlineSwitch.setText(checked ? R.string.online : R.string.offline);
+            if (showingAvailable) showAvailableOrders();
+        });
+        findViewById(R.id.buttonLogout).setOnClickListener(view ->
+                new com.google.android.material.dialog.MaterialAlertDialogBuilder(this).setTitle(R.string.account)
+                        .setMessage(driverName).setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(R.string.logout, (dialog, which) -> {
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(this, LoginActivity.class));
+                            finishAffinity();
+                        }).show());
         showAvailableOrders();
     }
 
     private void showAvailableOrders() {
+        showingHistory = false;
         showingAvailable = true;
         orderAdapter.setActionTextRes(R.string.accept_order);
         emptyText.setText(R.string.no_available_orders);
@@ -85,6 +111,7 @@ public class DriverDashboardActivity extends AppCompatActivity {
     }
 
     private void showMyDeliveries() {
+        showingHistory = false;
         showingAvailable = false;
         orderAdapter.setActionTextRes(R.string.open_delivery);
         emptyText.setText(R.string.no_active_deliveries);
@@ -101,11 +128,13 @@ public class DriverDashboardActivity extends AppCompatActivity {
                 List<Order> orders = new ArrayList<>();
                 for (DataSnapshot child : snapshot.getChildren()) {
                     Order order = child.getValue(Order.class);
-                    if (order != null && (!showingAvailable || !Constants.STATUS_DELIVERED.equals(order.getStatus()))) {
+                    if (order != null && (showingAvailable ? online && Constants.STATUS_PLACED.equals(order.getStatus())
+                            : Constants.STATUS_DELIVERED.equals(order.getStatus()) == showingHistory)) {
                         orders.add(order);
                     }
                 }
                 orderAdapter.setOrders(orders);
+                ((TextView) findViewById(R.id.textAssignedCount)).setText(getString(R.string.assigned_orders, orders.size()));
                 emptyText.setVisibility(orders.isEmpty() ? View.VISIBLE : View.GONE);
             }
 
@@ -126,6 +155,7 @@ public class DriverDashboardActivity extends AppCompatActivity {
     }
 
     private void acceptOrder(Order order) {
+        if (!online) return;
         Map<String, Object> values = new HashMap<>();
         values.put("driverId", driver.getUid());
         values.put("driverName", driverName);

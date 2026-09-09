@@ -1,118 +1,150 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" ?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:fillViewport="true">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
-
-        <TextView
-            android:layout_width="wrap_content"
+    android:fillViewport="true"
+    >
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonBack"
+                android:text="@string/back_arrow"
+                android:contentDescription="@string/back"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:padding="0dp"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
             android:text="@string/register"
-            android:textAppearance="?attr/textAppearanceHeadlineLarge"
-            android:textColor="@color/primary_orange" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:hint="@string/full_name">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="@string/email">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="@string/password"
-            app:passwordToggleEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
-
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"/>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/choose_role"
-            android:textAppearance="?attr/textAppearanceTitleLarge" />
-
+            android:textSize="14sp"
+            android:text="@string/get_started"
+            android:gravity="center"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="4dp"/>
         <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/radioGroupRole"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:checkedButton="@id/radioCustomer"
-            android:orientation="horizontal">
-
+            android:layout_marginTop="20dp">
             <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/radioCustomer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/customer" />
-
+                style="@style/Widget.Food.Role"
+                android:layout_weight="1"
+                android:text="@string/customer"/>
             <RadioButton
-                android:id="@+id/radioDriver"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/delivery_driver" />
+                android:id="@+id/radioDriver"
+                style="@style/Widget.Food.Role"
+                android:layout_weight="1"
+                android:text="@string/delivery_driver"/>
         </RadioGroup>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonRegister"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/register" />
-
+            android:hint="@string/full_name"
+            app:startIconDrawable="@android:drawable/ic_menu_myplaces"
+            android:layout_marginTop="12dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextName"
+                android:inputType="textPersonName"
+                android:textSize="14sp"
+                android:minHeight="56dp"
+                android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            app:startIconDrawable="@android:drawable/ic_dialog_email"
+            android:layout_marginTop="12dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextEmail"
+                android:inputType="textEmailAddress"
+                android:textSize="14sp"
+                android:minHeight="56dp"
+                android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            app:startIconDrawable="@android:drawable/ic_lock_lock"
+            android:layout_marginTop="12dp"
+            app:endIconMode="password_toggle">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextPassword"
+                android:inputType="textPassword"
+                android:textSize="14sp"
+                android:minHeight="56dp"
+                android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/confirm_password"
+            app:startIconDrawable="@android:drawable/ic_lock_lock"
+            android:layout_marginTop="12dp"
+            app:endIconMode="password_toggle">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextConfirmPassword"
+                android:inputType="textPassword"
+                android:textSize="14sp"
+                android:minHeight="56dp"
+                android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonRegister"
+            android:text="@string/register"
+            android:layout_marginTop="24dp"/>
         <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/progressRegister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/loading"
-            android:visibility="gone" />
-
+            android:visibility="gone"
+            android:contentDescription="@string/loading"/>
         <TextView
-            android:id="@+id/textLogin"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:padding="8dp"
+            android:id="@+id/textLogin"
+            android:textSize="14sp"
             android:text="@string/have_account"
-            android:textColor="@color/primary_orange"
-            android:textStyle="bold" />
+            android:gravity="center"
+            android:padding="16dp"
+            android:minHeight="48dp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/primary_orange"/>
     </LinearLayout>
 </ScrollView>

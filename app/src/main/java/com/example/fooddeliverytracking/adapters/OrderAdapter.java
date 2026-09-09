@@ -56,14 +56,21 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orders.get(position);
         holder.orderId.setText(holder.itemView.getContext().getString(R.string.order_id, order.getOrderId()));
+        ((TextView) holder.itemView.findViewById(R.id.textOrderRestaurant)).setText(order.getRestaurantName());
+        TextView destination = holder.itemView.findViewById(R.id.textOrderDestination);
+        boolean driverOrder = actionTextRes != R.string.track_order;
+        destination.setVisibility(driverOrder ? View.VISIBLE : View.GONE);
+        destination.setText(holder.itemView.getContext().getString(R.string.order_destination, order.getCustomerName(), order.getCustomerAddress()));
         holder.date.setText(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
                 .format(new Date(order.getCreatedAt())));
         holder.items.setText(buildItemSummary(order.getItems()));
         String status = formatStatus(order.getStatus());
         holder.status.setText(holder.itemView.getContext().getString(R.string.status, status));
+        holder.status.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),
+                Constants.STATUS_DELIVERED.equals(order.getStatus()) ? R.color.success_surface : R.color.primary_orange_light));
         holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), getStatusColor(order.getStatus())));
         holder.total.setText(holder.itemView.getContext().getString(R.string.order_total, order.getTotalAmount()));
-        holder.track.setText(actionTextRes);
+        holder.track.setText(Constants.STATUS_DELIVERED.equals(order.getStatus()) ? R.string.view_details : actionTextRes);
         holder.track.setOnClickListener(view -> listener.onTrackOrder(order));
     }
 

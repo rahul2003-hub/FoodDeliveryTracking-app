@@ -39,6 +39,17 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.buttonLogin);
         progressIndicator = findViewById(R.id.progressLogin);
 
+        findViewById(R.id.buttonForgotPassword).setOnClickListener(view -> {
+            String email = valueOf(emailInput);
+            if (TextUtils.isEmpty(email)) {
+                emailInput.setError(getString(R.string.field_required, getString(R.string.email)));
+                return;
+            }
+            firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(task ->
+                    Toast.makeText(this, task.isSuccessful() ? getString(R.string.reset_sent)
+                            : getString(R.string.auth_failed, task.getException() == null ? "" : task.getException().getMessage()),
+                            Toast.LENGTH_LONG).show());
+        });
         loginButton.setOnClickListener(view -> login());
         ((TextView) findViewById(R.id.textCreateAccount)).setOnClickListener(view -> {
             startActivity(new Intent(this, RegisterActivity.class));
@@ -75,6 +86,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         String role = snapshot.getValue(String.class);
+                        String selectedRole = ((android.widget.RadioGroup) findViewById(R.id.radioGroupRole))
+                                .getCheckedRadioButtonId() == R.id.radioDriver ? Constants.ROLE_DRIVER : Constants.ROLE_CUSTOMER;
+                        if (role != null && !selectedRole.equals(role)) {
+                            firebaseAuth.signOut();
+                            setLoading(false);
+                            Toast.makeText(LoginActivity.this, R.string.role_mismatch, Toast.LENGTH_LONG).show();
+                            return;
+                        }
                         if (Constants.ROLE_DRIVER.equals(role)) {
                             openRoleScreen(".driver.DriverDashboardActivity");
                         } else if (Constants.ROLE_CUSTOMER.equals(role)) {

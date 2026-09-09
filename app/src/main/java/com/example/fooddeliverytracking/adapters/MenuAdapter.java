@@ -26,6 +26,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     }
 
     private List<MenuItem> menuItems;
+    private boolean cartMode;
     private final Map<String, Integer> quantities = new HashMap<>();
     private final Map<String, MenuItem> itemsById = new HashMap<>();
     private final OnCartChanged cartChangedListener;
@@ -73,8 +74,20 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         return total;
     }
 
+    public List<MenuItem> getSelectedMenuItems() {
+        List<MenuItem> selected = new ArrayList<>();
+        for (MenuItem item : itemsById.values()) if (getQuantity(item) > 0) selected.add(item);
+        return selected;
+    }
+
+    public void setCartMode(boolean cartMode) {
+        this.cartMode = cartMode;
+    }
+
     public void clearCart() {
         quantities.clear();
+        itemsById.clear();
+        rememberItems(menuItems);
         notifyDataSetChanged();
         cartChangedListener.onCartChanged();
     }
@@ -93,7 +106,15 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         holder.name.setText(item.getName());
         holder.description.setText(item.getDescription());
         holder.price.setText(holder.itemView.getContext().getString(R.string.price, item.getPrice()));
-        holder.quantity.setText(String.valueOf(getQuantity(item)));
+        int quantity = getQuantity(item);
+        holder.quantity.setText(String.valueOf(quantity));
+        holder.quantity.setVisibility(quantity == 0 ? View.GONE : View.VISIBLE);
+        holder.decrease.setVisibility(quantity == 0 ? View.GONE : View.VISIBLE);
+        holder.increase.setText(quantity == 0 ? holder.itemView.getContext().getString(R.string.add) : holder.itemView.getContext().getString(R.string.quantity_plus));
+        View remove = holder.itemView.findViewById(R.id.buttonRemove);
+        remove.setVisibility(cartMode ? View.VISIBLE : View.GONE);
+        remove.setOnClickListener(view -> changeQuantity(item, -getQuantity(item), holder.getAdapterPosition()));
+        holder.description.setVisibility(cartMode ? View.GONE : View.VISIBLE);
         holder.increase.setOnClickListener(view -> changeQuantity(item, 1, holder.getAdapterPosition()));
         holder.decrease.setOnClickListener(view -> changeQuantity(item, -1, holder.getAdapterPosition()));
     }

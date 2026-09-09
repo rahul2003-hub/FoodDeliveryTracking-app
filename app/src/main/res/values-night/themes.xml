@@ -1,12 +1,1 @@
-<resources>
-    <style name="Base.Theme.FoodDeliveryTracking" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/primary_orange</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/primary_orange_light</item>
-        <item name="colorOnSecondary">@color/secondary_dark</item>
-        <item name="colorTertiary">@color/accent_green</item>
-        <item name="colorOnSurface">@color/text_primary</item>
-        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
-        <item name="android:fontFamily">sans</item>
-    </style>
-</resources>
+<resources />

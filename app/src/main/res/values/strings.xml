@@ -1,24 +1,24 @@
 <resources>
-    <string name="app_name">Food Delivery Tracking</string>
-    <string name="login">Login</string>
-    <string name="register">Create Account</string>
-    <string name="customer_home">Food Menu</string>
-    <string name="my_orders">My Orders</string>
-    <string name="track_order">Track Order</string>
+    <string name="app_name">Food Delivery</string>
+    <string name="login">Sign in</string>
+    <string name="register">Create account</string>
+    <string name="customer_home">What sounds good?</string>
+    <string name="my_orders">Your orders</string>
+    <string name="track_order">Track order</string>
     <string name="driver_dashboard">Driver Dashboard</string>
     <string name="delivery_details">Delivery Details</string>
     <string name="live_location_notification">Driver Live Location Tracking</string>
     <string name="live_location_notification_text">Sharing your location with the customer.</string>
-    <string name="welcome_title">Delicious food, delivered live</string>
-    <string name="welcome_subtitle">Sign in to order food or manage deliveries.</string>
+    <string name="welcome_title">Welcome back</string>
+    <string name="welcome_subtitle">Good food, right on time.</string>
     <string name="full_name">Full name</string>
     <string name="email">Email address</string>
     <string name="password">Password</string>
     <string name="choose_role">I am joining as</string>
     <string name="customer">Customer</string>
-    <string name="delivery_driver">Delivery Driver</string>
+    <string name="delivery_driver">Delivery partner</string>
     <string name="no_account">New here? Create an account</string>
-    <string name="have_account">Already have an account? Login</string>
+    <string name="have_account">Already registered? Sign in</string>
     <string name="field_required">Please enter %1$s</string>
     <string name="password_too_short">Password must contain at least 6 characters.</string>
     <string name="auth_failed">Unable to continue: %1$s</string>
@@ -32,15 +32,14 @@
     <string name="drinks">Drinks</string>
     <string name="your_cart">Your cart</string>
     <string name="place_order">Place Order</string>
-    <string name="cart_summary">%1$d item(s) • ₹%2$.2f</string>
-    <string name="price">₹%1$.2f</string>
+    <string name="price">₹%1$.0f</string>
     <string name="empty_cart">Add at least one item to your cart.</string>
     <string name="order_placed">Order placed successfully.</string>
     <string name="order_id">Order #%1$s</string>
     <string name="no_orders">No orders yet. Your placed orders will appear here.</string>
     <string name="items_summary">%1$s</string>
     <string name="order_total">Total: ₹%1$.2f</string>
-    <string name="status">Status: %1$s</string>
+    <string name="status">%1$s</string>
     <string name="restaurant">Restaurant</string>
     <string name="customer_location">Delivery location</string>
     <string name="driver_location">Driver location</string>
@@ -63,7 +62,7 @@
     <string name="destination">Destination: %1$s</string>
     <string name="mark_picked_up">Mark Picked Up</string>
     <string name="start_delivery">Start Delivery</string>
-    <string name="mark_delivered">Mark Delivered</string>
+    <string name="mark_delivered">Mark as delivered</string>
     <string name="simulate_driver_step">Simulate Driver Step</string>
     <string name="location_permission_needed">Location permission is needed to share live delivery updates.</string>
     <string name="address_not_found">Enter a complete, real delivery address.</string>
@@ -78,4 +77,63 @@
         <item>KFC</item>
         <item>Gurukripa</item>
     </string-array>
+    <string name="get_started">Let’s get you started</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="password_mismatch">Passwords do not match.</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="reset_sent">Password reset email sent.</string>
+    <string name="role_mismatch">Choose the role associated with your account.</string>
+    <string name="back">Back</string>
+    <string name="deliver_to">DELIVER TO</string>
+    <string name="home">Home</string>
+    <string name="orders">Orders</string>
+    <string name="account">Account</string>
+    <string name="search_dishes">Search dishes</string>
+    <string name="popular_dishes">Popular dishes</string>
+    <string name="fresh_meals">Fresh meals, delivered nearby</string>
+    <string name="view_cart">View cart →</string>
+    <string name="item_total">Item total</string>
+    <string name="delivery_fee">Delivery fee</string>
+    <string name="included">Included</string>
+    <string name="total">Total</string>
+    <string name="cash_on_delivery">Cash on delivery</string>
+    <string name="pay_on_arrival">Pay when you receive your order</string>
+    <string name="checkout_total">Place order · ₹%1$.0f</string>
+    <string name="active">Active</string>
+    <string name="past">Past</string>
+    <string name="delivery_partner_label">DELIVERY PARTNER</string>
+    <string name="hello_driver">Hello, %1$s</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="assigned_orders">Assigned orders · %1$d</string>
+    <string name="deliveries">Deliveries</string>
+    <string name="history">History</string>
+    <string name="active_delivery">Active delivery</string>
+    <string name="open_navigation">Open navigation</string>
+    <string name="cash_collect">Cash to collect · ₹%1$.0f</string>
+    <string name="location_after_delivery">Location sharing ends after delivery</string>
+    <string name="your_delivery_partner">Your delivery partner</string>
+    <string name="location_updated">Location updated %1$s</string>
+    <string name="waiting_location">Waiting for a location update</string>
+    <string name="delivery_progress">Delivery progress</string>
+    <string name="view_details">View details</string>
+    <string name="remove_item">Remove item</string>
+    <string name="add">ADD</string>
+    <string name="increase_quantity">Increase quantity</string>
+    <string name="decrease_quantity">Decrease quantity</string>
+    <string name="no_matches">No dishes match your search.</string>
+    <string name="pickup_from">Pickup from %1$s</string>
+    <string name="deliver_customer">Deliver to %1$s</string>
+    <string name="back_arrow" translatable="false">←</string>
+    <string name="quantity_plus" translatable="false">+</string>
+    <string name="quantity_minus" translatable="false">−</string>
+    <string name="order_destination">Deliver to %1$s\n%2$s</string>
+    <plurals name="cart_items">
+        <item quantity="one">%1$d item · ₹%2$.0f</item>
+        <item quantity="other">%1$d items · ₹%2$.0f</item>
+    </plurals>
+    <string name="startup_title">Good Food</string>
+    <string name="startup_highlight">Brighter Days</string>
+    <string name="startup_subtitle">Delicious food, delivered to
+your doorstep</string>
 </resources>

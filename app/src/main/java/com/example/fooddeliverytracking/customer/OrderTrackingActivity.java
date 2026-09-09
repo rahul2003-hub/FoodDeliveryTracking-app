@@ -54,6 +54,7 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_tracking);
+        findViewById(R.id.buttonBack).setOnClickListener(view -> finish());
         String orderId = getIntent().getStringExtra(EXTRA_ORDER_ID);
         if (orderId == null) {
             finish();
@@ -122,6 +123,11 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
         itemsView.setText(buildItemSummary(currentOrder.getItems()));
         totalView.setText(getString(R.string.order_total, currentOrder.getTotalAmount()));
 
+        TextView locationUpdated = findViewById(R.id.textLocationUpdated);
+        DriverLocation location = currentOrder.getDriverLocation();
+        locationUpdated.setText(location == null ? getString(R.string.waiting_location)
+                : getString(R.string.location_updated, android.text.format.DateUtils.getRelativeTimeSpanString(
+                        location.getUpdatedAt(), System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS)));
         if (googleMap == null) {
             return;
         }
@@ -181,6 +187,9 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
             boolean active = i <= activeStep;
             statusViews[i].setTextColor(ContextCompat.getColor(this,
                     active ? R.color.primary_orange : R.color.text_secondary));
+            for (android.graphics.drawable.Drawable icon : statusViews[i].getCompoundDrawables()) {
+                if (icon != null) icon.mutate().setTint(ContextCompat.getColor(this, active ? R.color.primary_orange : R.color.text_secondary));
+            }
             statusViews[i].setTypeface(Typeface.DEFAULT, active ? Typeface.BOLD : Typeface.NORMAL);
         }
     }

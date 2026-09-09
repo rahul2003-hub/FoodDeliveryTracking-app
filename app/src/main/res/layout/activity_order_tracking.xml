@@ -1,58 +1,153 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" ?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:orientation="vertical">
-
-    <HorizontalScrollView
+    android:orientation="vertical"
+    >
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp">
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="48dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="12dp">
-
-            <TextView android:id="@+id/statusPlaced" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/placed" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="›" />
-            <TextView android:id="@+id/statusAccepted" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/accepted" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="›" />
-            <TextView android:id="@+id/statusPickedUp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/picked_up" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="›" />
-            <TextView android:id="@+id/statusOutForDelivery" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/out_for_delivery" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="›" />
-            <TextView android:id="@+id/statusDelivered" android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="8dp" android:text="@string/delivered" />
+            android:id="@+id/buttonBack"
+            android:text="@string/back_arrow"
+            android:contentDescription="@string/back"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:padding="0dp"/>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="@string/track_order"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textTrackingOrderId"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"/>
         </LinearLayout>
-    </HorizontalScrollView>
-
+    </LinearLayout>
     <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        app:cardCornerRadius="16dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView android:id="@+id/textTrackingOrderId" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="?attr/textAppearanceTitleLarge" />
-            <TextView android:id="@+id/textTrackingDriver" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:textColor="@color/text_secondary" />
-            <TextView android:id="@+id/textTrackingItems" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" />
-            <TextView android:id="@+id/textTrackingTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:textColor="@color/primary_orange" android:textStyle="bold" />
+        android:id="@+id/map"
+        android:layout_weight="1"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:text="@string/delivery_progress"
+                android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statusPlaced"
+                    android:textSize="11sp"
+                    android:text="@string/placed"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    app:drawableTopCompat="@drawable/ic_status_placed"
+                    android:drawablePadding="6dp"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statusAccepted"
+                    android:textSize="11sp"
+                    android:text="@string/accepted"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    app:drawableTopCompat="@drawable/ic_status_accepted"
+                    android:drawablePadding="6dp"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statusPickedUp"
+                    android:textSize="11sp"
+                    android:text="@string/picked_up"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    app:drawableTopCompat="@drawable/ic_status_picked_up"
+                    android:drawablePadding="6dp"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statusOutForDelivery"
+                    android:textSize="11sp"
+                    android:text="@string/out_for_delivery"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    app:drawableTopCompat="@drawable/ic_status_out_for_delivery"
+                    android:drawablePadding="6dp"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/statusDelivered"
+                    android:textSize="11sp"
+                    android:text="@string/delivered"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingVertical="12dp"
+                    app:drawableTopCompat="@drawable/ic_status_delivered"
+                    android:drawablePadding="6dp"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textTrackingDriver"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="@string/your_delivery_partner"
+                android:textColor="@color/text_secondary"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textLocationUpdated"
+                android:textSize="12sp"
+                android:textColor="@color/accent_green"
+                android:layout_marginTop="12dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/order_details"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textTrackingItems"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textTrackingTotal"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
 </LinearLayout>

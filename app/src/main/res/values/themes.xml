@@ -1,5 +1,6 @@
+<?xml version="1.0" ?>
 <resources>
-    <style name="Base.Theme.FoodDeliveryTracking" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.FoodDeliveryTracking" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/primary_orange</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryContainer">@color/primary_orange_light</item>
@@ -12,27 +13,49 @@
         <item name="android:colorAccent">@color/primary_orange</item>
         <item name="android:fontFamily">sans</item>
         <item name="android:windowBackground">@color/background_light</item>
-        <item name="android:statusBarColor">@color/primary_orange_dark</item>
-        <item name="android:navigationBarColor">@color/surface_light</item>
-        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/secondary_dark</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="materialButtonStyle">@style/Widget.Food.Button</item>
+        <item name="textInputStyle">@style/Widget.Food.Input</item>
+        <item name="colorOutline">@color/outline</item>
         <item name="textAppearanceHeadlineLarge">@style/TextAppearance.FoodDelivery.Headline</item>
         <item name="textAppearanceTitleLarge">@style/TextAppearance.FoodDelivery.Title</item>
         <item name="textAppearanceBodyLarge">@style/TextAppearance.FoodDelivery.Body</item>
     </style>
-
-    <style name="Theme.FoodDeliveryTracking" parent="Base.Theme.FoodDeliveryTracking" />
-
+    <style name="Theme.FoodDeliveryTracking" parent="Base.Theme.FoodDeliveryTracking"/>
     <style name="TextAppearance.FoodDelivery.Headline" parent="TextAppearance.Material3.HeadlineLarge">
         <item name="android:fontFamily">sans</item>
         <item name="android:textStyle">bold</item>
     </style>
-
     <style name="TextAppearance.FoodDelivery.Title" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:fontFamily">sans</item>
         <item name="android:textStyle">bold</item>
     </style>
-
     <style name="TextAppearance.FoodDelivery.Body" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:fontFamily">sans</item>
+    </style>
+    <style name="Widget.Food.Button" parent="Widget.Material3.Button">
+        <item name="cornerRadius">10dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+    <style name="Widget.Food.Input" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="boxStrokeColor">@color/outline</item>
+        <item name="boxStrokeWidth">1dp</item>
+    </style>
+    <style name="Widget.Food.Role" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/role_background</item>
+        <item name="android:textColor">@drawable/role_text</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minHeight">48dp</item>
     </style>
 </resources>

@@ -1,74 +1,121 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" ?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light">
-
+    android:orientation="vertical"
+    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:id="@+id/textDriverOrderId"
-            android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp">
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="48dp"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceHeadlineLarge" />
-
-        <TextView
-            android:id="@+id/textDriverStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/primary_orange"
-            android:textStyle="bold" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <LinearLayout
+            android:id="@+id/buttonBack"
+            android:text="@string/back_arrow"
+            android:contentDescription="@string/back"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:padding="0dp"/>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView android:id="@+id/textDriverCustomer" android:layout_width="match_parent" android:layout_height="wrap_content" />
-                <TextView android:id="@+id/textDriverDestination" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" />
-                <TextView android:id="@+id/textDriverItems" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" />
-                <TextView android:id="@+id/textDriverTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:textColor="@color/primary_orange" android:textStyle="bold" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonPickedUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/mark_picked_up" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonStartDelivery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/start_delivery" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonDelivered"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/mark_delivered" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonSimulate"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:text="@string/simulate_driver_step" />
+                android:textSize="20sp"
+                android:text="@string/active_delivery"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDriverOrderId"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"/>
+        </LinearLayout>
     </LinearLayout>
-</ScrollView>
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/driverMap"
+        android:layout_weight="1"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1.5">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDriverStatus"
+                android:textSize="14sp"
+                android:textColor="@color/accent_green"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDriverPickup"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDriverCustomer"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDriverDestination"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="4dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonNavigation"
+                android:text="@string/open_navigation"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_marginTop="12dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDriverItems"
+                android:textSize="14sp"
+                android:layout_marginTop="12dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textDriverTotal"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonPickedUp"
+                android:text="@string/mark_picked_up"
+                android:layout_marginTop="12dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonStartDelivery"
+                android:text="@string/start_delivery"
+                android:layout_marginTop="12dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonDelivered"
+                android:text="@string/mark_delivered"
+                android:layout_marginTop="12dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:text="@string/location_after_delivery"
+                android:gravity="center"
+                android:textColor="@color/text_secondary"
+                android:paddingTop="12dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -2,6 +2,9 @@ package com.example.fooddeliverytracking;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,10 +20,21 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final Handler startupHandler = new Handler(Looper.getMainLooper());
+    private long startupTime;
+    private boolean navigationScheduled;
+    private DatabaseReference roleReference;
+    private ValueEventListener roleListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startupTime = SystemClock.elapsedRealtime();
         setContentView(R.layout.activity_main);
+        getWindow().setStatusBarColor(getColor(R.color.startup_background));
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O_MR1) {
+            getWindow().setNavigationBarColor(getColor(R.color.startup_background));
+        }
         routeCurrentUser();
     }
 
@@ -31,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        DatabaseReference roleReference = FirebaseDatabase.getInstance().getReference(Constants.NODE_USERS)
+        roleReference = FirebaseDatabase.getInstance().getReference(Constants.NODE_USERS)
                 .child(user.getUid()).child("role");
-        roleReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        roleListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 String role = snapshot.getValue(String.class);
@@ -51,18 +65,39 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError error) {
                 openLogin();
             }
-        });
+        };
+        roleReference.addListenerForSingleValueEvent(roleListener);
     }
 
     private void openLogin() {
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+        openWhenReady(new Intent(this, LoginActivity.class));
     }
 
     private void openRoleScreen(String activityName) {
         Intent intent = new Intent();
         intent.setClassName(this, getPackageName() + activityName);
-        startActivity(intent);
-        finish();
+        openWhenReady(intent);
+    }
+
+    private void openWhenReady(Intent intent) {
+        if (navigationScheduled || isFinishing() || isDestroyed()) return;
+        navigationScheduled = true;
+        // Resolve the session immediately; allow the startup artwork a brief first frame.
+        // startup loading screen time animation | scooter illustration
+        long remaining = Math.max(0, 3000 - (SystemClock.elapsedRealtime() - startupTime));
+        startupHandler.postDelayed(() -> {
+            if (isFinishing() || isDestroyed()) return;
+            startActivity(intent);
+            finish();
+        }, remaining);
+    }
+
+    @Override
+    protected void onDestroy() {
+        startupHandler.removeCallbacksAndMessages(null);
+        if (roleReference != null && roleListener != null) {
+            roleReference.removeEventListener(roleListener);
+        }
+        super.onDestroy();
     }
 }

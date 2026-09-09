@@ -28,6 +28,8 @@ import java.util.List;
 
 public class CustomerOrdersActivity extends AppCompatActivity {
 
+    private final List<Order> allOrders = new ArrayList<>();
+    private boolean showingPast;
     private OrderAdapter orderAdapter;
     private TextView emptyOrders;
     private Query ordersQuery;
@@ -45,6 +47,31 @@ public class CustomerOrdersActivity extends AppCompatActivity {
         ordersRecycler.setLayoutManager(new LinearLayoutManager(this));
         ordersRecycler.setAdapter(orderAdapter);
 
+        findViewById(R.id.buttonHome).setOnClickListener(view -> {
+            Intent intent = new Intent(this, CustomerHomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
+        findViewById(R.id.buttonLogout).setOnClickListener(view -> {
+            FirebaseUser account = FirebaseAuth.getInstance().getCurrentUser();
+            new com.google.android.material.dialog.MaterialAlertDialogBuilder(this).setTitle(R.string.account)
+                    .setMessage(account == null ? "" : account.getEmail()).setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.logout, (dialog, which) -> {
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(this, com.example.fooddeliverytracking.auth.LoginActivity.class));
+                        finishAffinity();
+                    }).show();
+        });
+        ((com.google.android.material.tabs.TabLayout) findViewById(R.id.tabsOrders)).addOnTabSelectedListener(
+                new com.google.android.material.tabs.TabLayout.OnTabSelectedListener() {
+                    public void onTabSelected(com.google.android.material.tabs.TabLayout.Tab tab) {
+                        showingPast = tab.getPosition() == 1;
+                        renderOrders();
+                    }
+                    public void onTabUnselected(com.google.android.material.tabs.TabLayout.Tab tab) { }
+                    public void onTabReselected(com.google.android.material.tabs.TabLayout.Tab tab) { }
+                });
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             ordersQuery = FirebaseDatabase.getInstance().getReference(Constants.NODE_ORDERS)
@@ -67,8 +94,9 @@ public class CustomerOrdersActivity extends AppCompatActivity {
                     }
                 }
                 Collections.sort(orders, Comparator.comparingLong(Order::getCreatedAt).reversed());
-                orderAdapter.setOrders(orders);
-                emptyOrders.setVisibility(orders.isEmpty() ? View.VISIBLE : View.GONE);
+                allOrders.clear();
+                allOrders.addAll(orders);
+                renderOrders();
             }
 
             @Override
@@ -77,6 +105,15 @@ public class CustomerOrdersActivity extends AppCompatActivity {
             }
         };
         ordersQuery.addValueEventListener(ordersListener);
+    }
+
+    private void renderOrders() {
+        List<Order> visible = new ArrayList<>();
+        for (Order order : allOrders) {
+            if (Constants.STATUS_DELIVERED.equals(order.getStatus()) == showingPast) visible.add(order);
+        }
+        orderAdapter.setOrders(visible);
+        emptyOrders.setVisibility(visible.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
     private void openTracking(Order order) {

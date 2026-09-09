@@ -43,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.buttonRegister);
         progressIndicator = findViewById(R.id.progressRegister);
 
+        findViewById(R.id.buttonBack).setOnClickListener(view -> finish());
         registerButton.setOnClickListener(view -> register());
         ((TextView) findViewById(R.id.textLogin)).setOnClickListener(view -> finish());
     }
@@ -64,6 +65,11 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        TextInputEditText confirmation = findViewById(R.id.editTextConfirmPassword);
+        if (!password.equals(valueOf(confirmation))) {
+            confirmation.setError(getString(R.string.password_mismatch));
+            return;
+        }
         String role = roleGroup.getCheckedRadioButtonId() == R.id.radioDriver
                 ? Constants.ROLE_DRIVER : Constants.ROLE_CUSTOMER;
         setLoading(true);
