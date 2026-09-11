@@ -18,6 +18,7 @@ import com.example.fooddeliverytracking.models.Order;
 import com.example.fooddeliverytracking.models.OrderItem;
 import com.example.fooddeliverytracking.services.DriverLocationService;
 import com.example.fooddeliverytracking.utils.Constants;
+import com.example.fooddeliverytracking.utils.DeliveryUi;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,6 +56,8 @@ public class DriverDeliveryActivity extends AppCompatActivity {
     private MaterialButton startDeliveryButton;
     private MaterialButton deliveredButton;
     private GoogleMap deliveryMap;
+    private boolean cameraPositioned;
+    private String contactId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,10 @@ public class DriverDeliveryActivity extends AppCompatActivity {
             try { startActivity(intent); } catch (android.content.ActivityNotFoundException error) {
                 startActivity(new Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://www.google.com/maps/search/?api=1&query=" + android.net.Uri.encode(destination))));
             }
+        });
+        findViewById(R.id.buttonRecenter).setOnClickListener(view -> {
+            cameraPositioned = false;
+            renderMap();
         });
         orderId = getIntent().getStringExtra(EXTRA_ORDER_ID);
         if (orderId == null) {
@@ -117,12 +124,25 @@ public class DriverDeliveryActivity extends AppCompatActivity {
 
     private void renderOrder() {
         String status = currentOrder.getStatus();
-        orderIdText.setText(getString(R.string.order_id, currentOrder.getOrderId()));
-        statusText.setText(getString(R.string.status, status == null ? "" : status.replace('_', ' ')));
-        customerText.setText(getString(R.string.customer_details, currentOrder.getCustomerName()));
-        destinationText.setText(getString(R.string.destination, currentOrder.getCustomerAddress()));
+        orderIdText.setText(getString(R.string.short_order_id, currentOrder.getOrderId()));
+        statusText.setText(Constants.STATUS_PICKED_UP.equals(status) || Constants.STATUS_OUT_FOR_DELIVERY.equals(status)
+                ? R.string.pickup_complete : DeliveryUi.statusLabel(status));
+        DeliveryUi.progress(findViewById(android.R.id.content), status, true);
+        TextView sharing = findViewById(R.id.textSharing);
+        DriverLocation location = currentOrder.getDriverLocation();
+        boolean fresh = Constants.STATUS_OUT_FOR_DELIVERY.equals(status) && location != null
+                && System.currentTimeMillis() - location.getUpdatedAt() < 60000;
+        sharing.setVisibility(fresh ? View.VISIBLE : View.GONE);
+        sharing.setText(R.string.sharing_live);
+        DeliveryUi.badge(sharing, true);
+        if (!java.util.Objects.equals(contactId, currentOrder.getCustomerId())) {
+            contactId = currentOrder.getCustomerId();
+            DeliveryUi.contact(this, findViewById(R.id.buttonCallContact), contactId);
+        }
+        customerText.setText(getString(R.string.deliver_customer, currentOrder.getCustomerName()));
+        destinationText.setText(currentOrder.getCustomerAddress());
         itemsText.setText(buildItemSummary(currentOrder.getItems()));
-        totalText.setText(getString(R.string.cash_collect, currentOrder.getTotalAmount()));
+        totalText.setText(getString(R.string.price, currentOrder.getTotalAmount()));
         ((TextView) findViewById(R.id.textDriverPickup)).setText(getString(R.string.pickup_from, currentOrder.getRestaurantName()));
         pickedUpButton.setEnabled(Constants.STATUS_ACCEPTED.equals(status));
         startDeliveryButton.setEnabled(Constants.STATUS_PICKED_UP.equals(status));
@@ -139,17 +159,24 @@ public class DriverDeliveryActivity extends AppCompatActivity {
         deliveryMap.clear();
         LatLng pickup = new LatLng(currentOrder.getRestaurantLat(), currentOrder.getRestaurantLng());
         LatLng dropoff = new LatLng(currentOrder.getCustomerLat(), currentOrder.getCustomerLng());
-        deliveryMap.addMarker(new MarkerOptions().position(pickup).title(currentOrder.getRestaurantName()));
-        deliveryMap.addMarker(new MarkerOptions().position(dropoff).title(currentOrder.getCustomerAddress()));
+        deliveryMap.addMarker(new MarkerOptions().position(pickup).title(currentOrder.getRestaurantName()).icon(DeliveryUi.marker(this, R.drawable.ic_restaurant, currentOrder.getRestaurantName())));
+        deliveryMap.addMarker(new MarkerOptions().position(dropoff).title(currentOrder.getCustomerAddress()).icon(DeliveryUi.marker(this, R.drawable.ic_destination, getString(R.string.home))));
         LatLngBounds.Builder bounds = new LatLngBounds.Builder().include(pickup).include(dropoff);
         if (currentOrder.getDriverLocation() != null) {
             DriverLocation location = currentOrder.getDriverLocation();
             LatLng driver = new LatLng(location.getLatitude(), location.getLongitude());
             deliveryMap.addMarker(new MarkerOptions().position(driver).title(getString(R.string.driver_location))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                    .icon(DeliveryUi.marker(this, R.drawable.ic_motorcycle, getString(R.string.driver_location))));
             bounds.include(driver);
         }
-        deliveryMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 64));
+        if (!cameraPositioned) {
+            cameraPositioned = true;
+            findViewById(R.id.driverMap).post(() -> {
+                if (!isDestroyed() && deliveryMap != null) {
+                    deliveryMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 64));
+                }
+            });
+        }
     }
 
     private void startDelivery() {

@@ -25,6 +25,11 @@ public class Order {
     private double totalAmount;
     private long createdAt;
     private DriverLocation driverLocation;
+    private Long estimatedArrivalAt;
+
+    public Long getEstimatedArrivalAt() { return estimatedArrivalAt; }
+
+    public void setEstimatedArrivalAt(Long estimatedArrivalAt) { this.estimatedArrivalAt = estimatedArrivalAt; }
 
     public Order() {
         // Required by Firebase Realtime Database.

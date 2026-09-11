@@ -1,153 +1,214 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    >
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="8dp">
+        android:paddingHorizontal="4dp"
+        android:minHeight="56dp">
         <com.google.android.material.button.MaterialButton
             android:layout_width="48dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:id="@+id/buttonBack"
             android:text="@string/back_arrow"
-            android:contentDescription="@string/back"
             style="@style/Widget.Material3.Button.TextButton"
-            android:padding="0dp"/>
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
+            android:padding="0dp"
+            android:textSize="24sp"
+            android:contentDescription="@string/back"></com.google.android.material.button.MaterialButton>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:text="@string/track_order"
-                android:textStyle="bold"/>
+                android:textStyle="bold"></TextView>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textTrackingOrderId"
                 android:textSize="12sp"
-                android:textColor="@color/text_secondary"/>
+                android:id="@+id/textTrackingOrderId"
+                android:textColor="@color/text_secondary"></TextView>
         </LinearLayout>
     </LinearLayout>
-    <fragment
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/map"
-        android:layout_weight="1"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
-    <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:text="@string/delivery_progress"
-                android:textStyle="bold"/>
+        android:layout_weight="1">
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"></androidx.fragment.app.FragmentContainerView>
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/buttonRecenter"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="12dp"
+            android:contentDescription="@string/recenter_map"
+            app:icon="@android:drawable/ic_menu_mylocation"
+            app:iconTint="@color/status_info"
+            app:backgroundTint="@color/white"
+            app:cornerRadius="24dp"
+            app:iconGravity="textStart"
+            android:padding="12dp"></com.google.android.material.button.MaterialButton>
+    </FrameLayout>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.15"
+        android:layout_marginTop="-16dp"
+        app:shapeAppearanceOverlay="@style/Shape.Food.Sheet"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="0dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/outline">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <TextView
-                    android:layout_width="0dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <View
+                    android:layout_width="36dp"
+                    android:layout_height="4dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="14dp"
+                    android:background="@color/outline"></View>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/statusPlaced"
-                    android:textSize="11sp"
-                    android:text="@string/placed"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingVertical="12dp"
-                    app:drawableTopCompat="@drawable/ic_status_placed"
-                    android:drawablePadding="6dp"/>
-                <TextView
-                    android:layout_width="0dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="30sp"
+                            android:id="@+id/textEta"
+                            android:text="@string/unknown_value"
+                            android:textStyle="bold"></TextView>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="@string/estimated_arrival"
+                            android:id="@+id/textEtaCaption"
+                            android:textColor="@color/text_secondary"></TextView>
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:id="@+id/textTrackingStatus"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="6dp"></TextView>
+                </LinearLayout>
+                <include
+                    layout="@layout/view_delivery_progress"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/statusAccepted"
-                    android:textSize="11sp"
-                    android:text="@string/accepted"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingVertical="12dp"
-                    app:drawableTopCompat="@drawable/ic_status_accepted"
-                    android:drawablePadding="6dp"/>
-                <TextView
-                    android:layout_width="0dp"
+                    android:layout_marginVertical="16dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/statusPickedUp"
-                    android:textSize="11sp"
-                    android:text="@string/picked_up"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingVertical="12dp"
-                    app:drawableTopCompat="@drawable/ic_status_picked_up"
-                    android:drawablePadding="6dp"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:textSize="18sp"
+                        android:id="@+id/textDriverAvatar"
+                        android:gravity="center"
+                        android:textColor="@color/white"></TextView>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="12dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:id="@+id/textTrackingDriver"
+                            android:text="@string/driver_unassigned"
+                            android:textStyle="bold"></TextView>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="@string/your_delivery_partner"
+                            android:textColor="@color/text_secondary"></TextView>
+                    </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:id="@+id/buttonCallContact"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        app:icon="@drawable/ic_phone"
+                        app:iconGravity="textStart"
+                        android:padding="12dp"
+                        app:cornerRadius="24dp"
+                        app:strokeColor="@color/primary_orange"
+                        android:contentDescription="@string/call_contact"
+                        android:enabled="false"></com.google.android.material.button.MaterialButton>
+                </LinearLayout>
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/statusOutForDelivery"
-                    android:textSize="11sp"
-                    android:text="@string/out_for_delivery"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingVertical="12dp"
-                    app:drawableTopCompat="@drawable/ic_status_out_for_delivery"
-                    android:drawablePadding="6dp"/>
-                <TextView
-                    android:layout_width="0dp"
+                    android:textSize="12sp"
+                    android:id="@+id/textLocationUpdated"
+                    android:text="@string/waiting_location"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="12dp"></TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/statusDelivered"
-                    android:textSize="11sp"
-                    android:text="@string/delivered"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingVertical="12dp"
-                    app:drawableTopCompat="@drawable/ic_status_delivered"
-                    android:drawablePadding="6dp"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:id="@+id/buttonOrderDetails"
+                    style="@style/Widget.Food.Row"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_receipt"
+                        android:contentDescription="@null"></ImageView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="@string/order_details"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:textStyle="bold"></TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="26sp"
+                        android:text="@string/chevron"
+                        android:textColor="@color/text_secondary"></TextView>
+                </LinearLayout>
             </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textTrackingDriver"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="@string/your_delivery_partner"
-                android:textColor="@color/text_secondary"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textLocationUpdated"
-                android:textSize="12sp"
-                android:textColor="@color/accent_green"
-                android:layout_marginTop="12dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/order_details"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textTrackingItems"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textTrackingTotal"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

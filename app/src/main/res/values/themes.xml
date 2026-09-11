@@ -58,4 +58,35 @@
         <item name="android:textSize">14sp</item>
         <item name="android:minHeight">48dp</item>
     </style>
+    <style name="Widget.Food.Row" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">@drawable/ui_surface</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:drawablePadding">14dp</item>
+    </style>
+    <style name="Widget.Food.Nav" parent="Widget.Material3.Button.TextButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="iconGravity">textTop</item>
+        <item name="iconSize">22dp</item>
+        <item name="iconPadding">4dp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="iconTint">@color/text_secondary</item>
+    </style>
+    <style name="Shape.Food.Sheet" parent="">
+        <item name="cornerSizeTopLeft">24dp</item>
+        <item name="cornerSizeTopRight">24dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
 </resources>

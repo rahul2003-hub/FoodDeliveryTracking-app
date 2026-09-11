@@ -60,6 +60,7 @@ public class DriverDashboardActivity extends AppCompatActivity {
                     User profile = snapshot.getValue(User.class);
                     if (profile != null && profile.getName() != null) driverName = profile.getName();
                     ((TextView) findViewById(R.id.textDriverGreeting)).setText(getString(R.string.hello_driver, driverName));
+                    com.example.fooddeliverytracking.utils.DeliveryUi.avatar(findViewById(R.id.textDashboardAvatar), driverName);
                 });
 
         emptyText = findViewById(R.id.textEmptyDriverOrders);
@@ -73,13 +74,7 @@ public class DriverDashboardActivity extends AppCompatActivity {
         availableButton.setOnClickListener(view -> showAvailableOrders());
         deliveriesButton.setOnClickListener(view -> showMyDeliveries());
         findViewById(R.id.buttonHome).setOnClickListener(view -> showAvailableOrders());
-        findViewById(R.id.buttonMyOrders).setOnClickListener(view -> {
-            showingHistory = true;
-            showingAvailable = false;
-            orderAdapter.setActionTextRes(R.string.view_details);
-            listenToOrders(FirebaseDatabase.getInstance().getReference(Constants.NODE_ORDERS)
-                    .orderByChild("driverId").equalTo(driver.getUid()));
-        });
+        findViewById(R.id.buttonMyOrders).setOnClickListener(view -> showHistory());
         com.google.android.material.materialswitch.MaterialSwitch onlineSwitch = findViewById(R.id.switchOnline);
         online = getPreferences(MODE_PRIVATE).getBoolean("online", true);
         onlineSwitch.setChecked(online);
@@ -91,14 +86,41 @@ public class DriverDashboardActivity extends AppCompatActivity {
             if (showingAvailable) showAvailableOrders();
         });
         findViewById(R.id.buttonLogout).setOnClickListener(view ->
-                new com.google.android.material.dialog.MaterialAlertDialogBuilder(this).setTitle(R.string.account)
-                        .setMessage(driverName).setNegativeButton(android.R.string.cancel, null)
-                        .setPositiveButton(R.string.logout, (dialog, which) -> {
-                            FirebaseAuth.getInstance().signOut();
-                            startActivity(new Intent(this, LoginActivity.class));
-                            finishAffinity();
-                        }).show());
-        showAvailableOrders();
+                startActivity(new Intent(this, com.example.fooddeliverytracking.AccountActivity.class)
+                        .putExtra("role", Constants.ROLE_DRIVER)));
+        if (getIntent().getBooleanExtra("show_history", false)) showHistory();
+        else showAvailableOrders();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (intent.getBooleanExtra("show_history", false)) showHistory();
+        else showAvailableOrders();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        boolean permission = androidx.core.content.ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED;
+        android.location.LocationManager manager = (android.location.LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean gps = manager != null && (manager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)
+                || manager.isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER));
+        TextView readiness = findViewById(R.id.textLocationReady);
+        readiness.setText(permission && gps ? R.string.location_ready : R.string.location_not_ready);
+        readiness.setTextColor(getColor(permission && gps ? R.color.accent_green : R.color.text_secondary));
+        readiness.setOnClickListener(v -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
+    }
+
+    private void showHistory() {
+        showingHistory = true;
+        showingAvailable = false;
+        orderAdapter.setActionTextRes(R.string.view_details);
+        emptyText.setText(R.string.no_orders);
+        listenToOrders(FirebaseDatabase.getInstance().getReference(Constants.NODE_ORDERS)
+                .orderByChild("driverId").equalTo(driver.getUid()));
     }
 
     private void showAvailableOrders() {

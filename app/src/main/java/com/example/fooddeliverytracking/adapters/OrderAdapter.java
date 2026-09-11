@@ -13,6 +13,7 @@ import com.example.fooddeliverytracking.R;
 import com.example.fooddeliverytracking.models.Order;
 import com.example.fooddeliverytracking.models.OrderItem;
 import com.example.fooddeliverytracking.utils.Constants;
+import com.example.fooddeliverytracking.utils.DeliveryUi;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.DateFormat;
@@ -28,6 +29,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     private final List<Order> orders = new ArrayList<>();
     private final OnTrackOrderClick listener;
+    private boolean recentSection;
+
+    public void setRecentSection(boolean enabled) { recentSection = enabled; }
+
     private int actionTextRes = R.string.track_order;
 
     public OrderAdapter(OnTrackOrderClick listener) {
@@ -55,21 +60,38 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order order = orders.get(position);
+        boolean delivered = Constants.STATUS_DELIVERED.equals(order.getStatus());
+        holder.itemView.findViewById(R.id.textRecentHeader).setVisibility(recentSection && delivered
+                && (position == 0 || !Constants.STATUS_DELIVERED.equals(orders.get(position - 1).getStatus()))
+                ? View.VISIBLE : View.GONE);
         holder.orderId.setText(holder.itemView.getContext().getString(R.string.order_id, order.getOrderId()));
         ((TextView) holder.itemView.findViewById(R.id.textOrderRestaurant)).setText(order.getRestaurantName());
         TextView destination = holder.itemView.findViewById(R.id.textOrderDestination);
         boolean driverOrder = actionTextRes != R.string.track_order;
-        destination.setVisibility(driverOrder ? View.VISIBLE : View.GONE);
+        holder.itemView.findViewById(R.id.dropoffRow).setVisibility(driverOrder ? View.VISIBLE : View.GONE);
+        holder.itemView.findViewById(R.id.imagePickup).setVisibility(driverOrder ? View.VISIBLE : View.GONE);
+        holder.itemView.findViewById(R.id.labelPickup).setVisibility(driverOrder ? View.VISIBLE : View.GONE);
+        holder.itemView.findViewById(R.id.imageOrderFood).setVisibility(driverOrder ? View.GONE : View.VISIBLE);
         destination.setText(holder.itemView.getContext().getString(R.string.order_destination, order.getCustomerName(), order.getCustomerAddress()));
-        holder.date.setText(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
-                .format(new Date(order.getCreatedAt())));
+        holder.date.setText(driverOrder ? order.getRestaurantAddress()
+                : delivered ? DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date(order.getCreatedAt())) : "");
+        holder.date.setVisibility(driverOrder || delivered ? View.VISIBLE : View.GONE);
         holder.items.setText(buildItemSummary(order.getItems()));
-        String status = formatStatus(order.getStatus());
-        holder.status.setText(holder.itemView.getContext().getString(R.string.status, status));
-        holder.status.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),
-                Constants.STATUS_DELIVERED.equals(order.getStatus()) ? R.color.success_surface : R.color.primary_orange_light));
-        holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), getStatusColor(order.getStatus())));
-        holder.total.setText(holder.itemView.getContext().getString(R.string.order_total, order.getTotalAmount()));
+        holder.status.setText(driverOrder && Constants.STATUS_PLACED.equals(order.getStatus())
+                ? R.string.new_assignment : DeliveryUi.statusLabel(order.getStatus()));
+        DeliveryUi.badge(holder.status, delivered);
+        int itemCount = 0;
+        if (order.getItems() != null) for (OrderItem item : order.getItems()) if (item != null) itemCount += item.getQuantity();
+        holder.total.setText(holder.itemView.getContext().getString(driverOrder ? R.string.driver_item_count
+                : R.string.order_item_count, itemCount, order.getTotalAmount()));
+        holder.items.setVisibility(driverOrder ? View.GONE : View.VISIBLE);
+        holder.track.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                ContextCompat.getColor(holder.itemView.getContext(), delivered ? android.R.color.transparent : R.color.primary_orange)));
+        holder.track.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), delivered ? R.color.primary_orange : R.color.white));
+        android.widget.LinearLayout.LayoutParams actionLayout = (android.widget.LinearLayout.LayoutParams) holder.track.getLayoutParams();
+        actionLayout.width = delivered ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT;
+        actionLayout.gravity = android.view.Gravity.END;
+        holder.track.setLayoutParams(actionLayout);
         holder.track.setText(Constants.STATUS_DELIVERED.equals(order.getStatus()) ? R.string.view_details : actionTextRes);
         holder.track.setOnClickListener(view -> listener.onTrackOrder(order));
     }
@@ -91,20 +113,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             summary.append(item.getQuantity()).append("x ").append(item.getName());
         }
         return summary.toString();
-    }
-
-    private String formatStatus(String status) {
-        return status == null ? "" : status.replace('_', ' ');
-    }
-
-    private int getStatusColor(String status) {
-        if (Constants.STATUS_DELIVERED.equals(status)) {
-            return R.color.accent_green;
-        }
-        if (Constants.STATUS_ACCEPTED.equals(status) || Constants.STATUS_PICKED_UP.equals(status)) {
-            return R.color.status_info;
-        }
-        return R.color.status_pending;
     }
 
     static class OrderViewHolder extends RecyclerView.ViewHolder {

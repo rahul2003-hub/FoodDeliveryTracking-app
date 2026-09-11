@@ -30,6 +30,7 @@
         <activity android:name=".customer.CustomerHomeActivity" android:exported="false" />
         <activity android:name=".customer.CustomerOrdersActivity" android:exported="false" />
         <activity android:name=".customer.OrderTrackingActivity" android:exported="false" />
+        <activity android:name=".AccountActivity" android:exported="false" />
         <activity android:name=".driver.DriverDashboardActivity" android:exported="false" />
         <activity android:name=".driver.DriverDeliveryActivity" android:exported="false" />
 

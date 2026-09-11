@@ -1,41 +1,221 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical"  android:fillViewport="true">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:padding="8dp">
-            <com.google.android.material.button.MaterialButton android:layout_width="48dp" android:layout_height="wrap_content" android:id="@+id/buttonBack" android:text="@string/back_arrow" android:contentDescription="@string/back" style="@style/Widget.Material3.Button.TextButton" android:padding="0dp" />
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1">
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="20sp" android:text="@string/your_cart" android:textStyle="bold" />
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonBack"
+                android:text="@string/back_arrow"
+                android:contentDescription="@string/back"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:padding="0dp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="@string/your_cart"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/textCartRestaurant" android:textSize="14sp" android:paddingHorizontal="16dp" android:textColor="@color/text_secondary" />
-        <androidx.recyclerview.widget.RecyclerView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/recyclerCart" android:nestedScrollingEnabled="false" />
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="@string/delivery_address" android:layout_marginTop="12dp">
-                <com.google.android.material.textfield.TextInputEditText android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/editTextAddress" android:inputType="textPostalAddress" android:textSize="14sp" android:minHeight="56dp" android:singleLine="true" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textCartRestaurant"
+            android:textSize="14sp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/text_secondary" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerCart"
+            android:nestedScrollingEnabled="false" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                style="@style/Widget.Food.Row">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_destination"
+                    android:contentDescription="@null"></ImageView>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="@string/deliver_home"
+                        android:textStyle="bold"></TextView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:id="@+id/textCartAddress"
+                        android:textColor="@color/text_secondary"></TextView>
+                </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/buttonChangeAddress"
+                    android:text="@string/change"
+                    style="@style/Widget.Material3.Button.TextButton"></com.google.android.material.button.MaterialButton>
+            </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/addressField"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/delivery_address"
+                android:layout_marginTop="12dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editTextAddress"
+                    android:inputType="textPostalAddress"
+                    android:textSize="14sp"
+                    android:minHeight="56dp"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="12dp" app:cardElevation="0dp" app:strokeColor="@color/outline" app:strokeWidth="1dp" android:layout_marginTop="12dp">
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:textSize="14sp" android:text="@string/item_total" android:layout_weight="1" />
-                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/textItemTotal" android:textSize="14sp" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/outline"
+                app:strokeWidth="1dp"
+                android:layout_marginTop="12dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="@string/item_total"
+                            android:layout_weight="1" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textItemTotal"
+                            android:textSize="14sp" />
                     </LinearLayout>
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="12dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:textSize="14sp" android:text="@string/delivery_fee" android:layout_weight="1" />
-                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="14sp" android:text="@string/included" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="12dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="@string/delivery_fee"
+                            android:layout_weight="1" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="@string/included" />
                     </LinearLayout>
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="16dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:textSize="18sp" android:text="@string/total" android:layout_weight="1" android:textStyle="bold" />
-                        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/textCheckoutTotal" android:textSize="18sp" android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="16dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:text="@string/total"
+                            android:layout_weight="1"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textCheckoutTotal"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="12dp" app:cardElevation="0dp" app:strokeColor="@color/outline" app:strokeWidth="1dp" android:layout_marginTop="12dp">
-                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="12dp">
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="14sp" android:text="@string/cash_on_delivery" android:textStyle="bold" />
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="12sp" android:text="@string/pay_on_arrival" android:textColor="@color/text_secondary" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/outline"
+                app:strokeWidth="1dp"
+                android:layout_marginTop="12dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="@string/cash_on_delivery"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="@string/pay_on_arrival"
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.button.MaterialButton android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/buttonCheckout" android:text="@string/place_order" android:layout_marginTop="16dp" />
-            <com.google.android.material.button.MaterialButton android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/buttonCancelOrder" android:text="@string/cancel_order" style="@style/Widget.Material3.Button.TextButton" />
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonCheckout"
+                android:text="@string/place_order"
+                android:layout_marginTop="16dp" />
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonCancelOrder"
+                android:text="@string/cancel_order"
+                style="@style/Widget.Material3.Button.TextButton" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

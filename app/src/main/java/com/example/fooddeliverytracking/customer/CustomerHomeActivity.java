@@ -81,14 +81,8 @@ public class CustomerHomeActivity extends AppCompatActivity {
         ((MaterialButton) findViewById(R.id.buttonMyOrders)).setOnClickListener(view ->
                 startActivity(new Intent(this, CustomerOrdersActivity.class)));
         findViewById(R.id.buttonLogout).setOnClickListener(view ->
-                new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
-                        .setTitle(R.string.account).setMessage(customerName)
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .setPositiveButton(R.string.logout, (dialog, which) -> {
-                            FirebaseAuth.getInstance().signOut();
-                            startActivity(new Intent(this, LoginActivity.class));
-                            finishAffinity();
-                        }).show());
+                startActivity(new Intent(this, com.example.fooddeliverytracking.AccountActivity.class)
+                        .putExtra("role", Constants.ROLE_CUSTOMER)));
         ((Spinner) findViewById(R.id.spinnerRestaurant)).setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -100,6 +94,20 @@ public class CustomerHomeActivity extends AppCompatActivity {
         });
         loadCustomerName();
         selectRestaurant(0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FirebaseUser account = FirebaseAuth.getInstance().getCurrentUser();
+        if (account != null) FirebaseDatabase.getInstance().getReference(Constants.NODE_USERS)
+                .child(account.getUid()).child("homeAddress").get().addOnSuccessListener(snapshot -> {
+                    if (cartDialog != null || isDestroyed()) return;
+                    String saved = snapshot.getValue(String.class);
+                    if (saved != null) deliveryAddress = saved;
+                    ((TextView) findViewById(R.id.textDeliveryAddress)).setText(deliveryAddress.isEmpty()
+                            ? getString(R.string.delivery_address) : deliveryAddress);
+                });
     }
 
     private void loadCustomerName() {
@@ -137,6 +145,13 @@ public class CustomerHomeActivity extends AppCompatActivity {
         cartDialog.setContentView(R.layout.view_cart);
         addressInput = cartDialog.findViewById(R.id.editTextAddress);
         addressInput.setText(deliveryAddress);
+        TextView cartAddress = cartDialog.findViewById(R.id.textCartAddress);
+        cartAddress.setText(deliveryAddress.isEmpty() ? getString(R.string.add_address) : deliveryAddress);
+        cartDialog.findViewById(R.id.buttonChangeAddress).setOnClickListener(v -> {
+            android.view.View addressField = cartDialog.findViewById(R.id.addressField);
+            addressField.setVisibility(View.VISIBLE);
+            addressInput.requestFocus();
+        });
         ((TextView) cartDialog.findViewById(R.id.textCartRestaurant)).setText(restaurantName);
         RecyclerView homeList = findViewById(R.id.recyclerMenu);
         homeList.setAdapter(null);
@@ -151,6 +166,11 @@ public class CustomerHomeActivity extends AppCompatActivity {
         cartDialog.setOnDismissListener(dialog -> {
             deliveryAddress = addressInput.getText() == null ? "" : addressInput.getText().toString().trim();
             ((TextView) findViewById(R.id.textDeliveryAddress)).setText(deliveryAddress.isEmpty() ? getString(R.string.delivery_address) : deliveryAddress);
+            com.google.firebase.auth.FirebaseUser account = FirebaseAuth.getInstance().getCurrentUser();
+            if (account != null && !deliveryAddress.isEmpty()) {
+                FirebaseDatabase.getInstance().getReference(Constants.NODE_USERS).child(account.getUid())
+                        .child("homeAddress").setValue(deliveryAddress);
+            }
             cartList.setAdapter(null);
             cartDialog = null;
             menuAdapter.setCartMode(false);
@@ -189,6 +209,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
             return;
         }
         if (TextUtils.isEmpty(address)) {
+            cartDialog.findViewById(R.id.addressField).setVisibility(View.VISIBLE);
             addressInput.setError(getString(R.string.field_required, getString(R.string.delivery_address)));
             return;
         }

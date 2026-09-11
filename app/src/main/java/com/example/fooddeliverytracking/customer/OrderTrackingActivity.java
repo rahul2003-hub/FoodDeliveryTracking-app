@@ -1,7 +1,6 @@
 package com.example.fooddeliverytracking.customer;
 
 import android.animation.ValueAnimator;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -14,11 +13,11 @@ import com.example.fooddeliverytracking.models.DriverLocation;
 import com.example.fooddeliverytracking.models.Order;
 import com.example.fooddeliverytracking.models.OrderItem;
 import com.example.fooddeliverytracking.utils.Constants;
+import com.example.fooddeliverytracking.utils.DeliveryUi;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -44,11 +43,9 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
     private Order currentOrder;
     private DatabaseReference orderReference;
     private ValueEventListener orderListener;
-    private TextView[] statusViews;
+    private String contactId;
     private TextView orderIdView;
     private TextView driverView;
-    private TextView itemsView;
-    private TextView totalView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +57,22 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
             finish();
             return;
         }
-        statusViews = new TextView[]{
-                findViewById(R.id.statusPlaced), findViewById(R.id.statusAccepted),
-                findViewById(R.id.statusPickedUp), findViewById(R.id.statusOutForDelivery),
-                findViewById(R.id.statusDelivered)
-        };
         orderIdView = findViewById(R.id.textTrackingOrderId);
         driverView = findViewById(R.id.textTrackingDriver);
-        itemsView = findViewById(R.id.textTrackingItems);
-        totalView = findViewById(R.id.textTrackingTotal);
+        findViewById(R.id.buttonRecenter).setOnClickListener(view -> {
+            cameraPositioned = false;
+            if (currentOrder != null) renderOrder();
+        });
+        findViewById(R.id.buttonOrderDetails).setOnClickListener(view -> {
+            if (currentOrder == null) return;
+            new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.order_details)
+                    .setMessage(currentOrder.getRestaurantName() + "\n"
+                            + buildItemSummary(currentOrder.getItems()) + "\n"
+                            + getString(R.string.order_total, currentOrder.getTotalAmount()) + "\n"
+                            + currentOrder.getCustomerAddress())
+                    .setPositiveButton(android.R.string.ok, null).show();
+        });
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
 
         orderReference = FirebaseDatabase.getInstance().getReference(Constants.NODE_ORDERS).child(orderId);
@@ -115,19 +119,33 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
 
     private void renderOrder() {
         String status = currentOrder.getStatus() == null ? Constants.STATUS_PLACED : currentOrder.getStatus();
-        updateStatusStepper(status);
-        orderIdView.setText(getString(R.string.order_id, currentOrder.getOrderId()));
+        DeliveryUi.progress(findViewById(android.R.id.content), status, false);
+        TextView badge = findViewById(R.id.textTrackingStatus);
+        badge.setText(DeliveryUi.statusLabel(status));
+        DeliveryUi.badge(badge, Constants.STATUS_OUT_FOR_DELIVERY.equals(status) || Constants.STATUS_DELIVERED.equals(status));
+        ((TextView) findViewById(R.id.textEta)).setText(DeliveryUi.arrival(this, currentOrder));
+        ((TextView) findViewById(R.id.textEtaCaption)).setText(currentOrder.getEstimatedArrivalAt() == null
+                ? R.string.estimate_pending : R.string.estimated_arrival);
+        findViewById(R.id.textEtaCaption).setVisibility(Constants.STATUS_DELIVERED.equals(status)
+                ? android.view.View.GONE : android.view.View.VISIBLE);
+        orderIdView.setText(getString(R.string.short_order_id, currentOrder.getOrderId()));
         String driverName = currentOrder.getDriverName();
         driverView.setText(driverName == null || driverName.isEmpty()
                 ? getString(R.string.driver_unassigned) : driverName);
-        itemsView.setText(buildItemSummary(currentOrder.getItems()));
-        totalView.setText(getString(R.string.order_total, currentOrder.getTotalAmount()));
+        DeliveryUi.avatar(findViewById(R.id.textDriverAvatar), driverName);
+        if (!java.util.Objects.equals(contactId, currentOrder.getDriverId())) {
+            contactId = currentOrder.getDriverId();
+            DeliveryUi.contact(this, findViewById(R.id.buttonCallContact), contactId);
+        }
 
         TextView locationUpdated = findViewById(R.id.textLocationUpdated);
         DriverLocation location = currentOrder.getDriverLocation();
         locationUpdated.setText(location == null ? getString(R.string.waiting_location)
                 : getString(R.string.location_updated, android.text.format.DateUtils.getRelativeTimeSpanString(
                         location.getUpdatedAt(), System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS)));
+        locationUpdated.setTextColor(ContextCompat.getColor(this,
+                location != null && System.currentTimeMillis() - location.getUpdatedAt() < 60000
+                        ? R.color.accent_green : R.color.text_secondary));
         if (googleMap == null) {
             return;
         }
@@ -135,9 +153,9 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
         LatLng customer = new LatLng(currentOrder.getCustomerLat(), currentOrder.getCustomerLng());
         if (restaurantMarker == null) {
             restaurantMarker = googleMap.addMarker(new MarkerOptions().position(restaurant)
-                    .title(getString(R.string.restaurant)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    .title(currentOrder.getRestaurantName()).icon(DeliveryUi.marker(this, R.drawable.ic_restaurant, currentOrder.getRestaurantName())));
             customerMarker = googleMap.addMarker(new MarkerOptions().position(customer)
-                    .title(getString(R.string.customer_location)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    .title(currentOrder.getCustomerAddress()).icon(DeliveryUi.marker(this, R.drawable.ic_destination, getString(R.string.home))));
         } else {
             restaurantMarker.setPosition(restaurant);
             customerMarker.setPosition(customer);
@@ -150,7 +168,11 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
             if (lastDriverLocation != null) {
                 bounds.include(lastDriverLocation);
             }
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 80));
+            findViewById(R.id.map).post(() -> {
+                if (!isDestroyed() && googleMap != null) {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 80));
+                }
+            });
             cameraPositioned = true;
         }
     }
@@ -160,7 +182,7 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
         if (driverMarker == null) {
             driverMarker = googleMap.addMarker(new MarkerOptions().position(target)
                     .title(getString(R.string.driver_location))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                    .icon(DeliveryUi.marker(this, R.drawable.ic_motorcycle, getString(R.string.driver_location))));
             lastDriverLocation = target;
             return;
         }
@@ -175,23 +197,6 @@ public class OrderTrackingActivity extends AppCompatActivity implements OnMapRea
         });
         animator.start();
         lastDriverLocation = target;
-    }
-
-    private void updateStatusStepper(String status) {
-        int activeStep = 0;
-        if (Constants.STATUS_ACCEPTED.equals(status)) activeStep = 1;
-        else if (Constants.STATUS_PICKED_UP.equals(status)) activeStep = 2;
-        else if (Constants.STATUS_OUT_FOR_DELIVERY.equals(status)) activeStep = 3;
-        else if (Constants.STATUS_DELIVERED.equals(status)) activeStep = 4;
-        for (int i = 0; i < statusViews.length; i++) {
-            boolean active = i <= activeStep;
-            statusViews[i].setTextColor(ContextCompat.getColor(this,
-                    active ? R.color.primary_orange : R.color.text_secondary));
-            for (android.graphics.drawable.Drawable icon : statusViews[i].getCompoundDrawables()) {
-                if (icon != null) icon.mutate().setTint(ContextCompat.getColor(this, active ? R.color.primary_orange : R.color.text_secondary));
-            }
-            statusViews[i].setTypeface(Typeface.DEFAULT, active ? Typeface.BOLD : Typeface.NORMAL);
-        }
     }
 
     private String buildItemSummary(List<OrderItem> items) {

@@ -102,6 +102,12 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
     @Override
     public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
         MenuItem item = menuItems.get(position);
+        ViewGroup row = (ViewGroup) holder.image.getParent();
+        int imagePosition = cartMode ? 0 : row.getChildCount() - 1;
+        if (row.indexOfChild(holder.image) != imagePosition) {
+            row.removeView(holder.image);
+            row.addView(holder.image, imagePosition);
+        }
         holder.image.setImageResource(item.getImageResId());
         holder.name.setText(item.getName());
         holder.description.setText(item.getDescription());

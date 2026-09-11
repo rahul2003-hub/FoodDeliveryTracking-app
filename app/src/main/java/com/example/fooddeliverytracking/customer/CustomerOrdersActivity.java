@@ -53,16 +53,9 @@ public class CustomerOrdersActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-        findViewById(R.id.buttonLogout).setOnClickListener(view -> {
-            FirebaseUser account = FirebaseAuth.getInstance().getCurrentUser();
-            new com.google.android.material.dialog.MaterialAlertDialogBuilder(this).setTitle(R.string.account)
-                    .setMessage(account == null ? "" : account.getEmail()).setNegativeButton(android.R.string.cancel, null)
-                    .setPositiveButton(R.string.logout, (dialog, which) -> {
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(this, com.example.fooddeliverytracking.auth.LoginActivity.class));
-                        finishAffinity();
-                    }).show();
-        });
+        findViewById(R.id.buttonLogout).setOnClickListener(view ->
+                startActivity(new Intent(this, com.example.fooddeliverytracking.AccountActivity.class)
+                        .putExtra("role", Constants.ROLE_CUSTOMER)));
         ((com.google.android.material.tabs.TabLayout) findViewById(R.id.tabsOrders)).addOnTabSelectedListener(
                 new com.google.android.material.tabs.TabLayout.OnTabSelectedListener() {
                     public void onTabSelected(com.google.android.material.tabs.TabLayout.Tab tab) {
@@ -111,6 +104,13 @@ public class CustomerOrdersActivity extends AppCompatActivity {
         List<Order> visible = new ArrayList<>();
         for (Order order : allOrders) {
             if (Constants.STATUS_DELIVERED.equals(order.getStatus()) == showingPast) visible.add(order);
+        }
+        orderAdapter.setRecentSection(!showingPast);
+        if (!showingPast) {
+            int recent = 0;
+            for (Order order : allOrders) {
+                if (Constants.STATUS_DELIVERED.equals(order.getStatus()) && recent++ < 3) visible.add(order);
+            }
         }
         orderAdapter.setOrders(visible);
         emptyOrders.setVisibility(visible.isEmpty() ? View.VISIBLE : View.GONE);
